@@ -39,4 +39,4 @@ COPY composer.json composer.lock ./
 COPY . ./
 
 # Start with sleep (biar Jenkins bisa exec command)
-CMD ["php", "artisan", "octane:frankenphp", "--host=0.0.0.0", "--port=80"]
+CMD ["sleep", "infinity"]
