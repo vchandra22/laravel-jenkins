@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: app:latest
+        container_name: frankenphp_app
+        restart: unless-stopped
+        volumes:
+            - ./:/app
+            - ./.env:/app/.env
+        ports:
+            - "8080:80"
+        depends_on:
+            - db
+
+    db:
+        image: postgres:15
+        container_name: frankenphp_postgres
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: laravel
+            POSTGRES_USER: laraveluser
+            POSTGRES_PASSWORD: secret
+        ports:
+            - "5433:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+volumes:
+    postgres_data:
