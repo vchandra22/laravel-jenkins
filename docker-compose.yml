@@ -12,7 +12,7 @@ services:
             - ./:/app
             - ./.env:/app/.env
         ports:
-            - "8080:80"
+            - "9001:80"
         depends_on:
             - db
 
