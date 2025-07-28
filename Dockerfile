@@ -26,7 +26,7 @@ RUN install-php-extensions \
     pcntl
 
 # Install Node.js (22.x LTS)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs
 
 # Set working directory
