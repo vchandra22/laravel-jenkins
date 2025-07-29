@@ -9,7 +9,6 @@ services:
         container_name: frankenphp_app
         restart: unless-stopped
         volumes:
-            - ./public/build:/app/public/build
             - laravel_storage:/app/storage
             - laravel_cache:/app/bootstrap/cache
         ports:
