@@ -1,6 +1,6 @@
 :80 {
     root * /app/public
     encode gzip
-    php_fastcgi frankenphp
+    php_fastcgi unix//var/run/frankenphp.sock
     file_server
 }
