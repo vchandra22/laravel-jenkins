@@ -9,9 +9,7 @@ services:
         container_name: frankenphp_app
         restart: unless-stopped
         volumes:
-            - ./.env:/app/.env
-            - ./storage:/app/storage
-            - ./bootstrap/cache:/app/bootstrap/cache
+            - ./:/app
         ports:
             - "9001:80"
         depends_on:

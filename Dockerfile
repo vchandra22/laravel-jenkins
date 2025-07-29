@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     libsodium-dev \
     gnupg \
     ca-certificates \
+    git \
     software-properties-common
 
 # Install Composer
@@ -29,14 +30,14 @@ RUN install-php-extensions \
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs
 
-# Set working directory
 WORKDIR /app
 
-# Copy only composer definitions to leverage Docker cache
-COPY composer.json composer.lock ./
+# Copy and install dependencies
+COPY . /app
 
-# Copy remaining source code
-COPY . ./
+# Setup Laravel dependencies
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN npm install && npm run build
 
-# Start with sleep (biar Jenkins bisa exec command)
-CMD ["sleep", "infinity"]
+# Setup permission for Laravel
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
