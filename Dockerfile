@@ -39,5 +39,8 @@ COPY . /app
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 RUN npm install && npm run build
 
+# Add Caddyfile for serving the application
+COPY Caddyfile /etc/caddy/Caddyfile
+
 # Setup permission for Laravel
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
