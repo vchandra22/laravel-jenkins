@@ -1,30 +1,17 @@
 FROM dunglas/frankenphp:latest-php8.2
 
-# System dependencies
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    curl \
-    unzip \
-    libpq-dev \
-    libexif-dev \
-    libsodium-dev \
-    gnupg \
-    ca-certificates \
-    git \
-    software-properties-common
+    curl unzip git libpq-dev libexif-dev libsodium-dev gnupg \
+    ca-certificates software-properties-common
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install PHP extensions
 RUN install-php-extensions \
-    pgsql \
-    pdo_pgsql \
-    gd \
-    intl \
-    zip \
-    exif \
-    sodium \
-    pcntl
+    pgsql pdo_pgsql \
+    gd intl zip exif sodium pcntl
 
 # Install Node.js (22.x LTS)
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
@@ -32,15 +19,16 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
 
 WORKDIR /app
 
-# Copy and install dependencies
-COPY . /app
+# Copy entire project
+COPY . .
 
-# Setup Laravel dependencies
+# Install Laravel dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 RUN npm install && npm run build
 
-# Add Caddyfile for serving the application
-COPY Caddyfile /etc/caddy/Caddyfile
+# Copy entrypoint for permission fix and octane start
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Setup permission for Laravel
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
+# Use entrypoint to handle permission & Octane startup
+ENTRYPOINT ["/entrypoint.sh"]
