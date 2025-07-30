@@ -12,7 +12,7 @@ services:
             - laravel_storage:/app/storage
             - laravel_cache:/app/bootstrap/cache
         ports:
-            - "9001:80"
+            - "9001:90"
         depends_on:
             - db
 
